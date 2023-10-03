@@ -11,9 +11,9 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.3</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<!-- <release>11</release> -->	
+					<!-- <source>1.8</source>
+					<target>1.8</target> -->
+					<release>11</release>	
 				</configuration>
 			</plugin>
 			<plugin>
@@ -79,7 +79,7 @@
 			<groupId>org.testng</groupId>
 			<artifactId>testng</artifactId>
 			<version>6.9.8</version>
-			<scope>compile</scope>
+			<scope>test</scope>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.relevantcodes/extentreports -->
