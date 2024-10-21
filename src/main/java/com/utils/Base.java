@@ -4,9 +4,12 @@ import java.time.Duration;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.AfterSuite;
 
 import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
@@ -19,9 +22,9 @@ public class Base {
 	public static String strBrowser;
 	public static WebDriver driver;
 	public static WebDriverWait wait;
+	public static Actions action;
 	public static ExtentReports report;
 	public static ExtentTest test;
-	
 	
 	public void launchBrowser() throws Exception
 	{
@@ -29,10 +32,10 @@ public class Base {
 			
 			 report = new ExtentReports(System.getProperty("user.dir")+"\\ExtentReport\\ExtentReportResults.html");
 			 test = report.startTest("ExtentDemo");
-			 strBrowser = System.getProperty("browser").toUpperCase().trim();
+			 strBrowser = Config.readPropertyFile("Browser").toUpperCase().trim();
 			 switch(strBrowser) {
 			 case "CHROME":
-				 System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\drivers\\chromedriver.exe");
+				 WebDriverManager.chromedriver().setup();
 				 driver = new ChromeDriver();
 				 driver.manage().window().maximize();
 				 break;
@@ -54,7 +57,8 @@ public class Base {
 			 }
 			 
 			 driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-			 wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+			 wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+			 action = new Actions(driver);
 			 
 		}
 		catch(Exception e)
@@ -67,19 +71,44 @@ public class Base {
 	
 	public void launchApp() throws Exception
 	{
-		 strBaseUrl = Config.readPropertyFile("URL");
-		 driver.get(strBaseUrl);
+		try {
+			strBaseUrl = Config.readPropertyFile("URL");
+			driver.get(strBaseUrl);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e);
 		}
-		 
+	}		 
 	
 	public void closeBrowser() throws Exception
 	{
-		 driver.close();
-		 driver.quit();
-		 report.endTest(test);
-		 report.flush();
+		try {
+			driver.close();
+			driver.quit();
+			report.endTest(test);
+			report.flush();
 //		 report.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e);
 		}
+	}	
+	
+	
+	@AfterSuite
+	public void tearDown() throws Exception 
+	{
+		try {
+			driver.close();
+			driver.quit();
+			report.endTest(test);
+			report.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e);
+		}
+		
+	}
 	
 	
 }

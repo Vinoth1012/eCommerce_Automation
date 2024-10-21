@@ -1,18 +1,19 @@
 package com.pages;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import com.utils.Base;
 
 public class Homepage extends Base {
 
-	private By Search_Input = By.id("twotabsearchtextbox");
-	private By Search_Btn = By.id("nav-search-submit-button");
-	private By Orders_Link = By.id("nav-orders");
-	private By Cart_Link = By.id("nav-cart");
-	private By Hamburger_Menu_Link = By.id("HamburgerMenuDesktop");
-	
+	private By Search_Input = By.name("search");
+	private By Search_Btn = By.xpath("//button[@title='Search']");
+	private By Compare_Link = By.xpath("//a[@aria-label='Compare']");
+	private By Wishlist_Link = By.id("//a[@aria-label='Wishlist']");
+	private By Cart_Link = By.id("(//a[contains(@class,'cart')])[1]");
 	
 	
 //	This method is to wait for page load
@@ -51,22 +52,25 @@ public class Homepage extends Base {
 //	This method is for button click action
 	public void buttonClick(String strField) throws Exception {
 		strField = strField.replaceAll(" ", "").toUpperCase().trim();
+		WebElement we;
+		JavascriptExecutor js = (JavascriptExecutor) driver;
 		try {
 			switch (strField) {
 			case "SEARCH":
-				driver.findElement(Search_Btn).click();
+				we = driver.findElement(Search_Btn);
+				js.executeScript("arguments[0].click()", we);
 				break;
 				
 			case "CART":
 				driver.findElement(Cart_Link).click();
 				break;
 				
-			case "ORDERS":
-				driver.findElement(Orders_Link).click();
+			case "WISHLIST":
+				driver.findElement(Wishlist_Link).click();
 				break;
 				
-			case "HAMBURGERMENU":
-				driver.findElement(Hamburger_Menu_Link).click();
+			case "COMPARE":
+				driver.findElement(Compare_Link).click();
 				break;
 				
 			default:
