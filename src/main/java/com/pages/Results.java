@@ -10,25 +10,16 @@ import com.utils.Base;
 
 public class Results extends Base {
 
-	private By Filter_Delivery_Day_Checkbox = By.xpath("//div[@id='s-refinements']//div[@id='deliveryRefinements']//ul//li//input");
-	private By Filter_Delivery_Day_Label = By.xpath("//div[@id='s-refinements']//div[@id='deliveryRefinements']//ul//li");
-	private By Filter_Customer_Review = By.xpath("//div[@id='s-refinements']//div[@id='reviewsRefinements']//ul//li//a//i//span");
-	private By Filter_Price_Range = By.xpath("//div[@id='s-refinements']//div[@id='priceRefinements']//ul[1]//li//a//span");
-	private By Filter_Price_Range_Low_Input = By.xpath("//div[@id='s-refinements']//div[@id='priceRefinements']//ul[1]//li//input[@id='low-price']");
-	private By Filter_Price_Range_High_Input = By.xpath("//div[@id='s-refinements']//div[@id='priceRefinements']//ul[1]//li//input[@id='high-price']"); 
-	private By Filter_Price_Range_Go_Button = By.xpath("//div[@id='s-refinements']//div[@id='priceRefinements']//ul[1]//li//input[@type='submit']");
+	private By Results_Header = By.xpath("//h1");
 	
-	private By Results_Price = By.xpath("//div[contains(@class,'s-result-list s-search-results')]//div[@data-csa-c-type='item']//span[@class='a-price-whole']");
-	
-	private By Results_Page_Count = By.xpath("//div[@role='navigation']//span[@class='s-pagination-strip']//a[text()='Next']//preceding-sibling::span[1]");
-	private By Results_Next_Page = By.xpath("//div[@role='navigation']//span[@class='s-pagination-strip']//a[text()='Next']");
-	private By Language_Link = By.id("icp-touch-link-language");
+	private By Filter_Price_Range_Min = By.xpath("(//input[@aria-label='Minimum Price'])[2]");
+	private By Filter_Price_Range_Max = By.xpath("(//input[@aria-label='Maximum Price'])[2]");
 	
 	
 //	This method is to wait for page load
 	public void waitForPageLoad() throws Exception {
 		try {
-			wait.until(ExpectedConditions.presenceOfElementLocated(Language_Link));
+			wait.until(ExpectedConditions.presenceOfElementLocated(Results_Header));
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception(e);
@@ -41,23 +32,25 @@ public class Results extends Base {
 	public void applyFilter(String strCriteria, String strValue) throws Exception {
 		strCriteria = strCriteria.replaceAll(" ", "").toUpperCase().trim();
 		strValue = strValue.trim();
-		List <WebElement> weList;
-		Boolean flag = false;
+		WebElement we;
 		try {
 			switch (strCriteria) {
-			case "PRICE":
-				wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(Filter_Price_Range));
-				weList = driver.findElements(Filter_Price_Range);
-				for (int i = 0; i < weList.size(); i++) {
-					if(weList.get(i).getText().trim().equals(strValue)) {
-						weList.get(i).click();
-						flag = true;
-					}
-				}
-				if(!flag)
-					throw new Exception(strValue + " not available for Price filter");
+			case "MINPRICE":
+			case "MINIMUMPRICE":
+				wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(Filter_Price_Range_Min));
+				we = driver.findElement(Filter_Price_Range_Min);
+				we.clear();
+				we.sendKeys(strValue);
 				break;
 
+			case "MAXPRICE":
+			case "MAXIMUMPRICE":
+				wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(Filter_Price_Range_Max));
+				we = driver.findElement(Filter_Price_Range_Max);
+				we.clear();
+				we.sendKeys(strValue);
+				break;
+				
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + strCriteria);
 
@@ -81,13 +74,14 @@ public class Results extends Base {
 		Double doubleActualValue, expectedValueLowRange, expectedValueHighRange;
 		try {
 			switch (strCriteria) {
+			/*
 			case "PRICE":
-				wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(Results_Price));
-				wePage = driver.findElements(Results_Page_Count);
+//				wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(Results_Price));
+//				wePage = driver.findElements(Results_Page_Count);
 				pageCount = Integer.parseInt(wePage.get(0).getText().trim());
 //				iteration for all pages
 				for(int i = 1; i <= pageCount; i++) {
-					weList = driver.findElements(Results_Price);	
+//					weList = driver.findElements(Results_Price);	
 //					iteration for all items in a page
 					for (int j = 0; j < weList.size(); j++) {
 						strActualValue = weList.get(j).getText();
@@ -99,6 +93,7 @@ public class Results extends Base {
 					}
 				}
 				break;
+				*/
 				
 			default:
 				throw new IllegalArgumentException("Unexpected value: " + strCriteria);
