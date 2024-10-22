@@ -61,50 +61,7 @@ public class Results extends Base {
 		}
 		
 	}
-	
-	
-//	This method is for verifying the results are based on the filter refinements
-	public void verifyResults(String strCriteria, String strValue) throws Exception {
-		strCriteria = strCriteria.replaceAll(" ", "").toUpperCase().trim();
-		strValue = strValue.trim();
-		List <WebElement> weList, wePage;
-		int pageCount = 0;
-		String strActualValue = "";
-		String[] strArrExpected = strValue.split("-");
-		Double doubleActualValue, expectedValueLowRange, expectedValueHighRange;
-		try {
-			switch (strCriteria) {
-			/*
-			case "PRICE":
-//				wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(Results_Price));
-//				wePage = driver.findElements(Results_Page_Count);
-				pageCount = Integer.parseInt(wePage.get(0).getText().trim());
-//				iteration for all pages
-				for(int i = 1; i <= pageCount; i++) {
-//					weList = driver.findElements(Results_Price);	
-//					iteration for all items in a page
-					for (int j = 0; j < weList.size(); j++) {
-						strActualValue = weList.get(j).getText();
-						doubleActualValue = Double.valueOf(strActualValue.replaceAll(",", ""));
-						expectedValueLowRange = Double.valueOf(strArrExpected[0]);
-						expectedValueHighRange = Double.valueOf(strArrExpected[1]);
-						if(!(expectedValueLowRange < doubleActualValue && doubleActualValue < expectedValueHighRange))
-							throw new Exception("Results are not refined based on the selected price range");
-					}
-				}
-				break;
-				*/
-				
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + strCriteria);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new Exception(e);
-		}
 		
 		
-		
-	}
 	
 }
