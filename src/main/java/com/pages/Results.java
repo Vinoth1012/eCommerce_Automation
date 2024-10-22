@@ -1,7 +1,5 @@
 package com.pages;
 
-import java.util.List;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -61,7 +59,28 @@ public class Results extends Base {
 		}
 		
 	}
+	
+	
+//	This method is for verifying the results are based on the filter refinements
+	public void verifyResults(String strCriteria, String strValue) throws Exception {
+		strCriteria = strCriteria.replaceAll(" ", "").toUpperCase().trim();
+		strValue = strValue.trim();
+		try {
+			switch (strCriteria) {
+			case "":
+				
+				break;
+			
+			default:
+				throw new IllegalArgumentException("Unexpected value: " + strCriteria);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception(e);
+		}
 		
 		
+		
+	}
 	
 }
